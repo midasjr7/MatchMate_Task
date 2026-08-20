@@ -24,6 +24,7 @@ class MatchRepository(
         database.withTransaction {
             val statuses = dao.getAll().associate { it.id to it.status }
             dao.upsertAll(remote.map { it.toEntity(statuses[it.login.uuid]) })
+            dao.deleteProfilesNotIn(remote.map { it.login.uuid })
         }
     }
 

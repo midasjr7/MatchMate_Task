@@ -32,7 +32,7 @@ Room is the source of truth. Network refreshes update it transactionally while p
 
 ## API synchronization note
 
-Profiles come from `https://randomuser.me/api/?results=10`. This read-only API has no endpoint for uploading decisions. Accept and decline choices are stored locally, while profiles refresh when connectivity is available. Decisions are preserved when a refreshed profile has the same login UUID.
+Profiles come from `https://randomuser.me/api/?results=10`. A stable API seed keeps the ten generated profile UUIDs consistent across refreshes. This read-only API has no endpoint for uploading decisions, so accept and decline choices are stored locally while profiles refresh when connectivity is available.
 
 ## Requirements
 

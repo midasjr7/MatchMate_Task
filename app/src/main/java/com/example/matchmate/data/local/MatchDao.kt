@@ -16,6 +16,9 @@ interface MatchDao {
     @Upsert
     suspend fun upsertAll(matches: List<MatchEntity>)
 
+    @Query("DELETE FROM matches WHERE id NOT IN (:profileIds)")
+    suspend fun deleteProfilesNotIn(profileIds: List<String>)
+
     @Query("UPDATE matches SET status = :status WHERE id = :id")
     suspend fun updateStatus(id: String, status: String): Int
 }

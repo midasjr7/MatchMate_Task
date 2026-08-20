@@ -3,7 +3,7 @@ package com.example.matchmate.data.remote
 import retrofit2.http.GET
 
 interface RandomUserApi {
-    @GET("api/?results=10&inc=login,name,dob,location,email,phone,picture")
+    @GET("api/?results=10&seed=matchmate&inc=login,name,dob,location,email,phone,picture")
     suspend fun getMatches(): RandomUserResponse
 }
 

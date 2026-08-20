@@ -1,6 +1,38 @@
 # MatchMate
 
-MatchMate is a starter Android application written in Kotlin. The initial project uses a single `app` module, Jetpack Compose, and Material 3.
+MatchMate is an offline-first matrimonial matching sample. It downloads profiles from the Random User API, presents them as modern match cards, and persists accept or decline decisions locally.
+
+## Features
+
+- Match cards rendered with Jetpack Compose and `LazyColumn`
+- Accept and decline decisions with immediate visual feedback
+- Room-backed cache and decision persistence
+- Cached profiles and decisions remain usable offline
+- Retrofit refresh with recoverable error states
+- Connectivity-constrained background refresh through WorkManager
+
+## Architecture
+
+```text
+Compose UI -> ViewModel -> Repository -> Room
+                                 |
+                                 +-> Random User API
+```
+
+Room is the source of truth. Network refreshes update it transactionally while preserving existing decisions. The assignment mentions RecyclerView and LiveData; this implementation uses their modern Jetpack equivalents: Compose `LazyColumn` and lifecycle-aware `StateFlow`.
+
+## Libraries
+
+- Jetpack Compose and Material 3
+- Lifecycle ViewModel and StateFlow
+- Room with KSP
+- Retrofit, Gson, and OkHttp
+- Coil Compose
+- WorkManager
+
+## API synchronization note
+
+Profiles come from `https://randomuser.me/api/?results=10`. This read-only API has no endpoint for uploading decisions. Accept and decline choices are stored locally, while profiles refresh when connectivity is available. Decisions are preserved when a refreshed profile has the same login UUID.
 
 ## Requirements
 
@@ -24,18 +56,19 @@ The debug APK is generated under `app/build/outputs/apk/debug/`.
 ## Project structure
 
 ```text
-app/
-  src/main/java/com/example/matchmate/  Kotlin source
-  src/main/java/.../ui/theme/           Compose theme
-  src/main/res/                         Android resources
-  src/test/                             Local unit tests
-  src/androidTest/                      Instrumented tests
-gradle/libs.versions.toml               Dependency versions
+app/src/main/java/com/example/matchmate/
+  data/                  Retrofit, Room, and repository
+  domain/                Match model and decision status
+  ui/matches/            Compose screen and ViewModel
+  worker/                Connectivity-constrained refresh
+  ui/theme/              Material theme
+gradle/libs.versions.toml Dependency versions
 ```
 
 ## Useful commands
 
 ```powershell
 .\gradlew.bat testDebugUnitTest
+.\gradlew.bat lintDebug
 .\gradlew.bat assembleDebug
 ```

@@ -9,8 +9,14 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import com.example.matchmate.worker.ProfileRefreshWorker
 
 class MatchMateApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ProfileRefreshWorker.schedule(this)
+    }
+
     val repository: MatchRepository by lazy {
         val logging = HttpLoggingInterceptor().apply {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE

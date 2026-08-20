@@ -32,7 +32,7 @@ class MatchRepository(
     }
 }
 
-private fun UserDto.toEntity(existingStatus: String?) = MatchEntity(
+internal fun UserDto.toEntity(existingStatus: String?) = MatchEntity(
     id = login.uuid,
     name = "${name.first} ${name.last}",
     age = dob.age,

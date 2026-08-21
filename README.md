@@ -13,6 +13,7 @@ MatchMate is an offline-first matrimonial matching sample. It downloads profiles
 - Incremental profile loading with Paging 3, Room, and `RemoteMediator`
 - Lifecycle-bound foreground tasks and cancellation-safe error handling
 - Supervised activity startup tasks with sanitized exception logging
+- Supervised ViewModel operations with cancellation-safe UI cleanup
 - Idempotent periodic refresh scheduling when the main activity starts
 
 ## Architecture

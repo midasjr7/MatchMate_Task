@@ -6,6 +6,7 @@ MatchMate is an offline-first matrimonial matching sample. It downloads profiles
 
 - Match cards rendered with Jetpack Compose and `LazyColumn`
 - Gender-aware profile placeholders with in-card photo retry
+- Debug-only deterministic image failures for testing placeholder and retry states
 - Accept and decline decisions with immediate visual feedback
 - Room-backed cache and decision persistence
 - Cached profiles and decisions remain usable offline
@@ -45,6 +46,8 @@ Profiles come from `https://randomuser.me/api/?results=10`. A stable API seed ke
 The HTTPS base URL is generated into `BuildConfig` from the `PROFILE_BASE_URL` Gradle property. Override it for another environment with `-PPROFILE_BASE_URL=https://example.com/` (the trailing slash is required by Retrofit). URLs and other `BuildConfig` values are not treated as secrets because they can be recovered from an APK. Cleartext traffic and Android backup are disabled, and HTTP logging is enabled only in debug builds.
 
 Profile names, locations, email addresses, and phone numbers are encrypted before Room persistence using AES-256-GCM. The encryption key is generated and retained by Android Keystore and is not embedded in the APK. The single `1 → 2` migration adds pagination and gender columns and encrypts profile data left by version 1. Profile IDs and decision status remain plaintext because they are required for stable identity and database updates.
+
+Debug builds intentionally replace roughly one in five profile image URLs with a missing local file so the placeholder and retry UI can be exercised. `SIMULATE_IMAGE_FAILURES` is generated as `false` for release builds.
 
 ## Requirements
 

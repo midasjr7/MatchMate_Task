@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
 import com.example.matchmate.security.DataCipher
+import com.example.matchmate.BuildConfig
 
 interface MatchRepository {
     fun pagedMatches(): Flow<PagingData<Match>>
@@ -62,7 +63,11 @@ internal fun UserDto.toEntity(existingStatus: String?, cipher: DataCipher, page:
     location = cipher.encrypt(listOf(location.city, location.state, location.country).joinToString(", ")),
     email = cipher.encrypt(email),
     phone = cipher.encrypt(phone),
-    imageUrl = picture.large,
+    imageUrl = if (BuildConfig.SIMULATE_IMAGE_FAILURES && login.uuid.hashCode().mod(5) == 0) {
+        "file:///missing-profile-images/${login.uuid}.jpg"
+    } else {
+        picture.large
+    },
     status = existingStatus ?: MatchStatus.PENDING.name,
     page = page,
     gender = when (gender.lowercase()) {

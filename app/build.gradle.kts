@@ -31,7 +31,11 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("boolean", "SIMULATE_IMAGE_FAILURES", "true")
+        }
         release {
+            buildConfigField("boolean", "SIMULATE_IMAGE_FAILURES", "false")
             optimization {
                 enable = false
             }

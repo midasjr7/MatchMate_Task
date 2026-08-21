@@ -4,11 +4,18 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
+import androidx.paging.PagingSource
 
 @Dao
 interface MatchDao {
     @Query("SELECT * FROM matches ORDER BY id")
     fun observeAll(): Flow<List<MatchEntity>>
+
+    @Query("SELECT * FROM matches ORDER BY page, id")
+    fun pagingSource(): PagingSource<Int, MatchEntity>
+
+    @Query("SELECT MAX(page) FROM matches")
+    suspend fun maxLoadedPage(): Int?
 
     @Query("SELECT * FROM matches")
     suspend fun getAll(): List<MatchEntity>

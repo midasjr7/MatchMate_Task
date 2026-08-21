@@ -2,10 +2,11 @@ package com.example.matchmate.ui.matches
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.matchmate.data.MatchRepository
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
-import java.io.IOException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,50 +16,17 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 data class MatchesUiState(
-    val matches: List<Match> = emptyList(),
-    val isInitialLoading: Boolean = true,
-    val isRefreshing: Boolean = false,
-    val isOffline: Boolean = false,
     val updatingMatchIds: Set<String> = emptySet(),
     val message: String? = null,
 )
 
 @HiltViewModel
 class MatchesViewModel @Inject constructor(private val repository: MatchRepository) : ViewModel() {
+    val matches: kotlinx.coroutines.flow.Flow<PagingData<Match>> =
+        repository.pagedMatches().cachedIn(viewModelScope)
+
     private val _uiState = MutableStateFlow(MatchesUiState())
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            repository.observeMatches().collect { matches ->
-                _uiState.update { it.copy(matches = matches, isInitialLoading = false) }
-            }
-        }
-        refresh()
-    }
-
-    fun refresh() {
-        if (_uiState.value.isRefreshing) return
-        viewModelScope.launch {
-            _uiState.update { it.copy(isRefreshing = true, message = null) }
-            runCatching { repository.refresh() }
-                .onSuccess { _uiState.update { it.copy(isRefreshing = false, isOffline = false) } }
-                .onFailure { error ->
-                    _uiState.update {
-                        it.copy(
-                            isRefreshing = false,
-                            isInitialLoading = false,
-                            isOffline = error is IOException,
-                            message = if (error is IOException) {
-                                "You're offline. Showing saved matches."
-                            } else {
-                                "Couldn't refresh matches. Please try again."
-                            },
-                        )
-                    }
-                }
-        }
-    }
 
     fun accept(id: String) = updateDecision(id, MatchStatus.ACCEPTED)
     fun decline(id: String) = updateDecision(id, MatchStatus.DECLINED)

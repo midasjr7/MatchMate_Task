@@ -10,6 +10,7 @@ MatchMate is an offline-first matrimonial matching sample. It downloads profiles
 - Cached profiles and decisions remain usable offline
 - Retrofit refresh with recoverable error states
 - Connectivity-constrained background refresh through WorkManager
+- Incremental profile loading with Paging 3, Room, and `RemoteMediator`
 
 ## Architecture
 
@@ -30,6 +31,7 @@ Room is the source of truth. Network refreshes update it transactionally while p
 - Coil Compose
 - WorkManager
 - Hilt dependency injection
+- Paging 3 and Paging Compose
 
 ## API synchronization note
 

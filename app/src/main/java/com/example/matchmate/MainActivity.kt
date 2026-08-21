@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.matchmate.ui.matches.MatchListScreen
 import com.example.matchmate.ui.matches.MatchesViewModel
 import com.example.matchmate.ui.theme.MatchMateTheme
@@ -20,9 +21,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             MatchMateTheme {
                 val state by viewModel.uiState.collectAsStateWithLifecycle()
+                val matches = viewModel.matches.collectAsLazyPagingItems()
                 MatchListScreen(
                     state = state,
-                    onRefresh = viewModel::refresh,
+                    matches = matches,
                     onAccept = viewModel::accept,
                     onDecline = viewModel::decline,
                     onMessageShown = viewModel::consumeMessage,

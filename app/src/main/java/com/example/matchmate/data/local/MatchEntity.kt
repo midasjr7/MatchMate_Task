@@ -16,6 +16,7 @@ data class MatchEntity(
     val phone: String,
     val imageUrl: String,
     val status: String = MatchStatus.PENDING.name,
+    val page: Int = 1,
 ) {
     fun toDomain(cipher: DataCipher) = Match(
         id = id,

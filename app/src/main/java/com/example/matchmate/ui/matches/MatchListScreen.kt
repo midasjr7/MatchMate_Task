@@ -42,11 +42,14 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 
 @Composable
 fun MatchListScreen(
     state: MatchesUiState,
-    onRefresh: () -> Unit,
+    matches: LazyPagingItems<Match>,
     onAccept: (String) -> Unit,
     onDecline: (String) -> Unit,
     onMessageShown: () -> Unit,
@@ -59,23 +62,31 @@ fun MatchListScreen(
 
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->
         Column(Modifier.fillMaxSize().padding(padding)) {
-            Header(state.isRefreshing, onRefresh)
-            if (state.isOffline) OfflineBanner()
+            val refreshState = matches.loadState.refresh
+            Header(refreshState is LoadState.Loading, matches::refresh)
+            if (refreshState is LoadState.Error && matches.itemCount > 0) OfflineBanner()
             when {
-                state.isInitialLoading && state.matches.isEmpty() -> LoadingState()
-                state.matches.isEmpty() -> EmptyState(onRefresh)
+                refreshState is LoadState.Loading && matches.itemCount == 0 -> LoadingState()
+                matches.itemCount == 0 -> EmptyState(matches::retry)
                 else -> LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                 ) {
-                    items(state.matches, key = Match::id) { match ->
-                        MatchCard(
-                            match = match,
-                            isUpdating = match.id in state.updatingMatchIds,
-                            onAccept = { onAccept(match.id) },
-                            onDecline = { onDecline(match.id) },
-                        )
+                    items(matches.itemCount, key = matches.itemKey(Match::id)) { index ->
+                        matches[index]?.let { match ->
+                            MatchCard(
+                                match = match,
+                                isUpdating = match.id in state.updatingMatchIds,
+                                onAccept = { onAccept(match.id) },
+                                onDecline = { onDecline(match.id) },
+                            )
+                        }
+                    }
+                    when (matches.loadState.append) {
+                        is LoadState.Loading -> item { LoadingMore() }
+                        is LoadState.Error -> item { LoadMoreError(matches::retry) }
+                        else -> Unit
                     }
                 }
             }
@@ -168,6 +179,17 @@ private fun DecisionLabel(text: String, accepted: Boolean) {
 }
 
 @Composable private fun LoadingState() = Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+
+@Composable private fun LoadingMore() = Box(Modifier.fillMaxWidth().padding(20.dp), contentAlignment = Alignment.Center) {
+    CircularProgressIndicator(Modifier.size(28.dp), strokeWidth = 3.dp)
+}
+
+@Composable private fun LoadMoreError(onRetry: () -> Unit) {
+    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+        Text("Couldn't load more matches")
+        TextButton(onClick = onRetry) { Text("Retry") }
+    }
+}
 
 @Composable
 private fun EmptyState(onRefresh: () -> Unit) {

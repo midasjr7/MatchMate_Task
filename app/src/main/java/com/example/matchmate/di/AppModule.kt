@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.matchmate.BuildConfig
 import com.example.matchmate.data.local.MatchDatabase
 import com.example.matchmate.data.local.MATCH_DATABASE_MIGRATION_1_2
+import com.example.matchmate.data.local.MATCH_DATABASE_MIGRATION_2_3
 import com.example.matchmate.data.remote.RandomUserApi
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,7 @@ object AppModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MatchDatabase =
         Room.databaseBuilder(context, MatchDatabase::class.java, "matchmate.db")
-            .addMigrations(MATCH_DATABASE_MIGRATION_1_2)
+            .addMigrations(MATCH_DATABASE_MIGRATION_1_2, MATCH_DATABASE_MIGRATION_2_3)
             .build()
 
     @Provides

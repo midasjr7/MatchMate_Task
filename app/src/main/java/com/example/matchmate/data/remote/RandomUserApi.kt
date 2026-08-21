@@ -1,10 +1,14 @@
 package com.example.matchmate.data.remote
 
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface RandomUserApi {
-    @GET("api/?results=10&seed=matchmate&inc=login,name,dob,location,email,phone,picture")
-    suspend fun getMatches(): RandomUserResponse
+    @GET("api/?seed=matchmate&inc=login,name,dob,location,email,phone,picture")
+    suspend fun getMatches(
+        @Query("page") page: Int = 1,
+        @Query("results") pageSize: Int = 10,
+    ): RandomUserResponse
 }
 
 data class RandomUserResponse(val results: List<UserDto>)

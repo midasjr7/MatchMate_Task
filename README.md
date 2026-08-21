@@ -86,6 +86,9 @@ gradle/libs.versions.toml Dependency versions
 
 ```powershell
 .\gradlew.bat testDebugUnitTest
+.\gradlew.bat connectedDebugAndroidTest
 .\gradlew.bat lintDebug
 .\gradlew.bat assembleDebug
 ```
+
+Local tests cover DTO/entity encryption mapping, gender/status preservation, safe error messages, and ViewModel accept/decline success and failure cleanup. Instrumented tests cover Room-backed Paging refresh and append, cached-data retention after network failure, decision preservation, Compose decision actions/states, and failed-image placeholder retry behavior.

@@ -12,6 +12,7 @@ import com.example.matchmate.data.remote.RandomUserApi
 import com.example.matchmate.data.remote.UserDto
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
+import com.example.matchmate.domain.Gender
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -64,4 +65,9 @@ internal fun UserDto.toEntity(existingStatus: String?, cipher: DataCipher, page:
     imageUrl = picture.large,
     status = existingStatus ?: MatchStatus.PENDING.name,
     page = page,
+    gender = when (gender.lowercase()) {
+        "male" -> Gender.MALE.name
+        "female" -> Gender.FEMALE.name
+        else -> Gender.UNKNOWN.name
+    },
 )

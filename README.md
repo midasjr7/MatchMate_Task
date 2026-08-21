@@ -5,6 +5,7 @@ MatchMate is an offline-first matrimonial matching sample. It downloads profiles
 ## Features
 
 - Match cards rendered with Jetpack Compose and `LazyColumn`
+- Gender-aware profile placeholders with in-card photo retry
 - Accept and decline decisions with immediate visual feedback
 - Room-backed cache and decision persistence
 - Cached profiles and decisions remain usable offline

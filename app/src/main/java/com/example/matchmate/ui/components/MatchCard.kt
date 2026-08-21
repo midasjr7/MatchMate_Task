@@ -21,13 +21,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
 
@@ -46,11 +44,10 @@ fun MatchCard(
     ) {
         Column {
             Box {
-                AsyncImage(
-                    model = match.imageUrl,
-                    contentDescription = "Profile photo of ${match.name}",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().height(270.dp),
+                ProfileImage(
+                    imageUrl = match.imageUrl,
+                    profileName = match.name,
+                    gender = match.gender,
                 )
                 Text(
                     text = "${match.age} yrs",

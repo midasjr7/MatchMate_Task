@@ -8,7 +8,9 @@ data class Match(
     val email: String,
     val phone: String,
     val imageUrl: String,
+    val gender: Gender,
     val status: MatchStatus,
 )
 
 enum class MatchStatus { PENDING, ACCEPTED, DECLINED }
+enum class Gender { MALE, FEMALE, UNKNOWN }

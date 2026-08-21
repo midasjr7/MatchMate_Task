@@ -4,7 +4,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface RandomUserApi {
-    @GET("api/?seed=matchmate&inc=login,name,dob,location,email,phone,picture")
+    @GET("api/?seed=matchmate&inc=gender,login,name,dob,location,email,phone,picture")
     suspend fun getMatches(
         @Query("page") page: Int = 1,
         @Query("results") pageSize: Int = 10,
@@ -13,6 +13,7 @@ interface RandomUserApi {
 
 data class RandomUserResponse(val results: List<UserDto>)
 data class UserDto(
+    val gender: String,
     val login: LoginDto,
     val name: NameDto,
     val dob: DobDto,

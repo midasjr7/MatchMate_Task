@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
+import com.example.matchmate.domain.Gender
 import com.example.matchmate.ui.theme.MatchMateTheme
 
 @Preview(name = "Pending match", showBackground = true, widthDp = 390)
@@ -91,5 +92,6 @@ private fun sampleMatch(status: MatchStatus) = Match(
     email = "aarav.sharma@example.com",
     phone = "+91 98765 43210",
     imageUrl = "https://randomuser.me/api/portraits/men/32.jpg",
+    gender = Gender.MALE,
     status = status,
 )

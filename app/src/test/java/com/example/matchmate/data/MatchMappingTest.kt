@@ -18,7 +18,7 @@ class MatchMappingTest {
         override fun decrypt(storedValue: String) = storedValue.removePrefix("encrypted:")
     }
     private val user = UserDto(
-        LoginDto("stable-id"), NameDto("Asha", "Shah"), DobDto(29),
+        "female", LoginDto("stable-id"), NameDto("Asha", "Shah"), DobDto(29),
         LocationDto("Pune", "Maharashtra", "India"), "asha@example.com",
         "1234567890", PictureDto("https://example.com/asha.jpg"),
     )

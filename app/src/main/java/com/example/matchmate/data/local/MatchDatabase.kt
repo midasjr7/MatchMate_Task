@@ -6,7 +6,7 @@ import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.matchmate.security.KeystoreDataCipher
 
-@Database(entities = [MatchEntity::class], version = 3, exportSchema = false)
+@Database(entities = [MatchEntity::class], version = 4, exportSchema = false)
 abstract class MatchDatabase : RoomDatabase() {
     abstract fun matchDao(): MatchDao
 }
@@ -39,5 +39,11 @@ val MATCH_DATABASE_MIGRATION_1_2 = object : Migration(1, 2) {
 val MATCH_DATABASE_MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(db: SupportSQLiteDatabase) {
         db.execSQL("ALTER TABLE matches ADD COLUMN page INTEGER NOT NULL DEFAULT 1")
+    }
+}
+
+val MATCH_DATABASE_MIGRATION_3_4 = object : Migration(3, 4) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE matches ADD COLUMN gender TEXT NOT NULL DEFAULT 'UNKNOWN'")
     }
 }

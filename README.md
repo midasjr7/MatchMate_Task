@@ -44,7 +44,7 @@ Profiles come from `https://randomuser.me/api/?results=10`. A stable API seed ke
 
 The HTTPS base URL is generated into `BuildConfig` from the `PROFILE_BASE_URL` Gradle property. Override it for another environment with `-PPROFILE_BASE_URL=https://example.com/` (the trailing slash is required by Retrofit). URLs and other `BuildConfig` values are not treated as secrets because they can be recovered from an APK. Cleartext traffic and Android backup are disabled, and HTTP logging is enabled only in debug builds.
 
-Profile names, locations, email addresses, and phone numbers are encrypted before Room persistence using AES-256-GCM. The encryption key is generated and retained by Android Keystore and is not embedded in the APK. Database version 2 encrypts profile data left by version 1 during migration. Profile IDs and decision status remain plaintext because they are required for stable identity and database updates.
+Profile names, locations, email addresses, and phone numbers are encrypted before Room persistence using AES-256-GCM. The encryption key is generated and retained by Android Keystore and is not embedded in the APK. The single `1 → 2` migration adds pagination and gender columns and encrypts profile data left by version 1. Profile IDs and decision status remain plaintext because they are required for stable identity and database updates.
 
 ## Requirements
 

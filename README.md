@@ -29,6 +29,7 @@ Room is the source of truth. Network refreshes update it transactionally while p
 - Retrofit, Gson, and OkHttp
 - Coil Compose
 - WorkManager
+- Hilt dependency injection
 
 ## API synchronization note
 
@@ -61,6 +62,7 @@ app/src/main/java/com/example/matchmate/
   domain/                Match model and decision status
   ui/matches/            Compose screen and ViewModel
   worker/                Connectivity-constrained refresh
+  di/                    Hilt dependency providers
   ui/theme/              Material theme
 gradle/libs.versions.toml Dependency versions
 ```

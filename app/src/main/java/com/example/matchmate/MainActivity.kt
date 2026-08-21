@@ -9,11 +9,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.matchmate.ui.matches.MatchListScreen
 import com.example.matchmate.ui.matches.MatchesViewModel
 import com.example.matchmate.ui.theme.MatchMateTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val viewModel: MatchesViewModel by viewModels {
-        MatchesViewModel.factory((application as MatchMateApplication).repository)
-    }
+    private val viewModel: MatchesViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -1,7 +1,6 @@
 package com.example.matchmate.ui.matches
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.matchmate.data.MatchRepository
 import com.example.matchmate.domain.Match
@@ -12,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 data class MatchesUiState(
     val matches: List<Match> = emptyList(),
@@ -22,7 +23,8 @@ data class MatchesUiState(
     val message: String? = null,
 )
 
-class MatchesViewModel(private val repository: MatchRepository) : ViewModel() {
+@HiltViewModel
+class MatchesViewModel @Inject constructor(private val repository: MatchRepository) : ViewModel() {
     private val _uiState = MutableStateFlow(MatchesUiState())
     val uiState: StateFlow<MatchesUiState> = _uiState.asStateFlow()
 
@@ -73,12 +75,4 @@ class MatchesViewModel(private val repository: MatchRepository) : ViewModel() {
 
     fun consumeMessage() = _uiState.update { it.copy(message = null) }
 
-    companion object {
-        fun factory(repository: MatchRepository): ViewModelProvider.Factory =
-            object : ViewModelProvider.Factory {
-                @Suppress("UNCHECKED_CAST")
-                override fun <T : ViewModel> create(modelClass: Class<T>): T =
-                    MatchesViewModel(repository) as T
-            }
-    }
 }

@@ -8,16 +8,21 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.example.matchmate.MatchMateApplication
+import androidx.hilt.work.HiltWorker
+import com.example.matchmate.data.MatchRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
-class ProfileRefreshWorker(
-    appContext: Context,
-    params: WorkerParameters,
+@HiltWorker
+class ProfileRefreshWorker @AssistedInject constructor(
+    @Assisted appContext: Context,
+    @Assisted params: WorkerParameters,
+    private val repository: MatchRepository,
 ) : CoroutineWorker(appContext, params) {
     override suspend fun doWork(): Result = try {
-        (applicationContext as MatchMateApplication).repository.refresh()
+        repository.refresh()
         Result.success()
     } catch (_: IOException) {
         Result.retry()

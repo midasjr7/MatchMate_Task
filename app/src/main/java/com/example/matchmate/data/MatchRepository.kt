@@ -9,8 +9,11 @@ import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MatchRepository(
+@Singleton
+class MatchRepository @Inject constructor(
     private val database: MatchDatabase,
     private val api: RandomUserApi,
 ) {

@@ -32,7 +32,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("boolean", "SIMULATE_IMAGE_FAILURES", "true")
+            buildConfigField("boolean", "SIMULATE_IMAGE_FAILURES", "false")
         }
         release {
             buildConfigField("boolean", "SIMULATE_IMAGE_FAILURES", "false")

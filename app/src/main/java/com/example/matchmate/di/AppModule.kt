@@ -31,7 +31,7 @@ object AppModule {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
         }
         return Retrofit.Builder()
-            .baseUrl("https://randomuser.me/")
+            .baseUrl(BuildConfig.RANDOM_USER_BASE_URL)
             .client(OkHttpClient.Builder().addInterceptor(logging).build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

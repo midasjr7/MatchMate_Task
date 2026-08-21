@@ -5,6 +5,13 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+val randomUserBaseUrl = providers.gradleProperty("RANDOM_USER_BASE_URL")
+    .orElse("https://randomuser.me/")
+    .get()
+require(randomUserBaseUrl.startsWith("https://") && randomUserBaseUrl.endsWith("/")) {
+    "RANDOM_USER_BASE_URL must use HTTPS and end with a slash"
+}
+
 android {
     namespace = "com.example.matchmate"
     compileSdk {
@@ -17,6 +24,8 @@ android {
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
+
+        buildConfigField("String", "RANDOM_USER_BASE_URL", "\"$randomUserBaseUrl\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

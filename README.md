@@ -35,6 +35,8 @@ Room is the source of truth. Network refreshes update it transactionally while p
 
 Profiles come from `https://randomuser.me/api/?results=10`. A stable API seed keeps the ten generated profile UUIDs consistent across refreshes. This read-only API has no endpoint for uploading decisions, so accept and decline choices are stored locally while profiles refresh when connectivity is available.
 
+The HTTPS base URL is generated into `BuildConfig` from the `RANDOM_USER_BASE_URL` Gradle property. Override it for another environment with `-PRANDOM_USER_BASE_URL=https://example.com/` (the trailing slash is required by Retrofit). URLs and other `BuildConfig` values are not treated as secrets because they can be recovered from an APK. Cleartext traffic and Android backup are disabled, and HTTP logging is enabled only in debug builds.
+
 ## Requirements
 
 - Android Studio with JDK 17 or newer

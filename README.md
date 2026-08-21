@@ -12,6 +12,7 @@ MatchMate is an offline-first matrimonial matching sample. It downloads profiles
 - Connectivity-constrained background refresh through WorkManager
 - Incremental profile loading with Paging 3, Room, and `RemoteMediator`
 - Lifecycle-bound foreground tasks and cancellation-safe error handling
+- Supervised activity startup tasks with sanitized exception logging
 - Idempotent periodic refresh scheduling when the main activity starts
 
 ## Architecture

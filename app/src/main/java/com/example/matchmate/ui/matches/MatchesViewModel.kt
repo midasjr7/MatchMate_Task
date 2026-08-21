@@ -14,6 +14,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import com.example.matchmate.error.toUserMessage
+import kotlinx.coroutines.CancellationException
 
 data class MatchesUiState(
     val updatingMatchIds: Set<String> = emptySet(),
@@ -35,9 +37,15 @@ class MatchesViewModel @Inject constructor(private val repository: MatchReposito
         if (id in _uiState.value.updatingMatchIds) return
         viewModelScope.launch {
             _uiState.update { it.copy(updatingMatchIds = it.updatingMatchIds + id) }
-            runCatching { repository.updateStatus(id, status) }
-                .onFailure { _uiState.update { it.copy(message = "Couldn't save your decision.") } }
-            _uiState.update { it.copy(updatingMatchIds = it.updatingMatchIds - id) }
+            try {
+                repository.updateStatus(id, status)
+            } catch (error: CancellationException) {
+                throw error
+            } catch (error: Exception) {
+                _uiState.update { it.copy(message = error.toUserMessage()) }
+            } finally {
+                _uiState.update { it.copy(updatingMatchIds = it.updatingMatchIds - id) }
+            }
         }
     }
 

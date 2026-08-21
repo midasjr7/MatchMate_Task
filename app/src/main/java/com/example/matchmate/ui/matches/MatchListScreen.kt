@@ -45,6 +45,7 @@ import com.example.matchmate.domain.MatchStatus
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.example.matchmate.error.toUserMessage
 
 @Composable
 fun MatchListScreen(
@@ -58,6 +59,11 @@ fun MatchListScreen(
     LaunchedEffect(state.message) {
         state.message?.let { snackbarHostState.showSnackbar(it) }
         if (state.message != null) onMessageShown()
+    }
+    val pagingError = (matches.loadState.refresh as? LoadState.Error)?.error
+        ?: (matches.loadState.append as? LoadState.Error)?.error
+    LaunchedEffect(pagingError) {
+        pagingError?.let { snackbarHostState.showSnackbar(it.toUserMessage()) }
     }
 
     Scaffold(snackbarHost = { SnackbarHost(snackbarHostState) }) { padding ->

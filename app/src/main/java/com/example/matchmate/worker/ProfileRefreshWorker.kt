@@ -13,6 +13,8 @@ import com.example.matchmate.data.MatchRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import java.io.IOException
+import retrofit2.HttpException
+import kotlinx.coroutines.CancellationException
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -24,8 +26,14 @@ class ProfileRefreshWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = try {
         repository.refresh()
         Result.success()
+    } catch (error: CancellationException) {
+        throw error
     } catch (_: IOException) {
         Result.retry()
+    } catch (error: HttpException) {
+        if (error.code() == 429 || error.code() >= 500) Result.retry() else Result.failure()
+    } catch (_: SecurityException) {
+        Result.failure()
     } catch (_: Exception) {
         Result.failure()
     }

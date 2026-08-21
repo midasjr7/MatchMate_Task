@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.matchmate.BuildConfig
 import com.example.matchmate.data.local.MatchDatabase
+import com.example.matchmate.data.local.MATCH_DATABASE_MIGRATION_1_2
 import com.example.matchmate.data.remote.RandomUserApi
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): MatchDatabase =
-        Room.databaseBuilder(context, MatchDatabase::class.java, "matchmate.db").build()
+        Room.databaseBuilder(context, MatchDatabase::class.java, "matchmate.db")
+            .addMigrations(MATCH_DATABASE_MIGRATION_1_2)
+            .build()
 
     @Provides
     @Singleton
@@ -31,7 +34,7 @@ object AppModule {
             level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BASIC else HttpLoggingInterceptor.Level.NONE
         }
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.RANDOM_USER_BASE_URL)
+            .baseUrl(BuildConfig.PROFILE_BASE_URL)
             .client(OkHttpClient.Builder().addInterceptor(logging).build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()

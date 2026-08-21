@@ -5,11 +5,11 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-val randomUserBaseUrl = providers.gradleProperty("RANDOM_USER_BASE_URL")
+val profileBaseUrl = providers.gradleProperty("PROFILE_BASE_URL")
     .orElse("https://randomuser.me/")
     .get()
-require(randomUserBaseUrl.startsWith("https://") && randomUserBaseUrl.endsWith("/")) {
-    "RANDOM_USER_BASE_URL must use HTTPS and end with a slash"
+require(profileBaseUrl.startsWith("https://") && profileBaseUrl.endsWith("/")) {
+    "PROFILE_BASE_URL must use HTTPS and end with a slash"
 }
 
 android {
@@ -25,7 +25,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "RANDOM_USER_BASE_URL", "\"$randomUserBaseUrl\"")
+        buildConfigField("String", "PROFILE_BASE_URL", "\"$profileBaseUrl\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

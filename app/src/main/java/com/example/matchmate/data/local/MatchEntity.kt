@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.matchmate.domain.Match
 import com.example.matchmate.domain.MatchStatus
+import com.example.matchmate.security.DataCipher
 
 @Entity(tableName = "matches")
 data class MatchEntity(
@@ -16,13 +17,13 @@ data class MatchEntity(
     val imageUrl: String,
     val status: String = MatchStatus.PENDING.name,
 ) {
-    fun toDomain() = Match(
+    fun toDomain(cipher: DataCipher) = Match(
         id = id,
-        name = name,
+        name = cipher.decrypt(name),
         age = age,
-        location = location,
-        email = email,
-        phone = phone,
+        location = cipher.decrypt(location),
+        email = cipher.decrypt(email),
+        phone = cipher.decrypt(phone),
         imageUrl = imageUrl,
         status = runCatching { MatchStatus.valueOf(status) }.getOrDefault(MatchStatus.PENDING),
     )

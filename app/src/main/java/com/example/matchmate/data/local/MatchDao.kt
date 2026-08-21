@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface MatchDao {
-    @Query("SELECT * FROM matches ORDER BY name")
+    @Query("SELECT * FROM matches ORDER BY id")
     fun observeAll(): Flow<List<MatchEntity>>
 
     @Query("SELECT * FROM matches")

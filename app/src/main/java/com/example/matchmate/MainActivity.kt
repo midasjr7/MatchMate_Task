@@ -11,10 +11,21 @@ import com.example.matchmate.ui.matches.MatchListScreen
 import com.example.matchmate.ui.matches.MatchesViewModel
 import com.example.matchmate.ui.theme.MatchMateTheme
 import dagger.hilt.android.AndroidEntryPoint
+import com.example.matchmate.di.ApplicationScope
+import com.example.matchmate.worker.ProfileRefreshWorker
+import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val viewModel: MatchesViewModel by viewModels()
+    @Inject @ApplicationScope lateinit var applicationScope: CoroutineScope
+
+    override fun onStart() {
+        super.onStart()
+        applicationScope.launch { ProfileRefreshWorker.schedule(this@MainActivity) }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

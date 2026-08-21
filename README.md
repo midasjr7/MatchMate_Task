@@ -71,6 +71,7 @@ app/src/main/java/com/example/matchmate/
   data/                  Retrofit, Room, and repository
   domain/                Match model and decision status
   ui/matches/            Compose screen and ViewModel
+  ui/components/         Reusable match cards and screen states
   worker/                Connectivity-constrained refresh
   di/                    Hilt dependency providers
   ui/theme/              Material theme
